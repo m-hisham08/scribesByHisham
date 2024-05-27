@@ -39,6 +39,9 @@ public class Article extends UserDateAudit {
     @JsonManagedReference
     private Set<Category> categories = new HashSet<>();
 
+    @OneToMany(mappedBy = "article", orphanRemoval = true, cascade = CascadeType.ALL)
+    private Set<Like> likes = new HashSet<>();
+
     public void addCategory(Category category) {
         categories.add(category);
         category.getArticles().add(this);
@@ -47,5 +50,15 @@ public class Article extends UserDateAudit {
     public void removeCategory(Category category) {
         categories.remove(category);
         category.getArticles().remove(this);
+    }
+
+    public void addLike(Like like){
+        likes.add(like);
+        like.setArticle(this);
+    }
+
+    public void removeLike(Like like){
+        likes.remove(like);
+        like.setArticle(null);
     }
 }

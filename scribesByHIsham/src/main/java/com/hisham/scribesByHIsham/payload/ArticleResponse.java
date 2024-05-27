@@ -15,4 +15,5 @@ public class ArticleResponse {
     private String content;
     private List<CategoryResponse> categories;
     private UserSummary createdBy;
+    private int likesCount;
 }

@@ -10,6 +10,7 @@ import com.hisham.scribesByHIsham.model.User;
 import com.hisham.scribesByHIsham.payload.*;
 import com.hisham.scribesByHIsham.repository.ArticleRepository;
 import com.hisham.scribesByHIsham.repository.CategoryRepository;
+import com.hisham.scribesByHIsham.repository.LikeRepository;
 import com.hisham.scribesByHIsham.repository.UserRepository;
 import com.hisham.scribesByHIsham.security.CurrentUser;
 import com.hisham.scribesByHIsham.security.UserPrincipal;
@@ -42,6 +43,9 @@ public class ArticleController {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private LikeRepository likeRepository;
 
     private static final Logger logger = LoggerFactory.getLogger(ArticleController.class);
 
@@ -125,8 +129,10 @@ public class ArticleController {
             categories.add(new CategoryResponse(category.getName()));
         }
 
+        int likesCount = likeRepository.countByArticle(article);
+
         return new ArticleResponse(
-                article.getId(), article.getHeading(), article.getContent(),categories,userSummary
+                article.getId(), article.getHeading(), article.getContent(),categories,userSummary, likesCount
         );
 
     }
