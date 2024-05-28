@@ -42,6 +42,9 @@ public class Article extends UserDateAudit {
     @OneToMany(mappedBy = "article", orphanRemoval = true, cascade = CascadeType.ALL)
     private Set<Like> likes = new HashSet<>();
 
+    @OneToMany(mappedBy = "article", orphanRemoval = true, cascade = CascadeType.ALL)
+    private Set<Comment> comments = new HashSet<>();
+
     public void addCategory(Category category) {
         categories.add(category);
         category.getArticles().add(this);
@@ -60,5 +63,15 @@ public class Article extends UserDateAudit {
     public void removeLike(Like like){
         likes.remove(like);
         like.setArticle(null);
+    }
+
+    public void addComment(Comment comment){
+        comments.add(comment);
+        comment.setArticle(this);
+    }
+
+    public void removeComment(Comment comment){
+        comments.remove(comment);
+        comment.setArticle(null);
     }
 }

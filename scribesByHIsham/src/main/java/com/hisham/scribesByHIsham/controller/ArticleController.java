@@ -131,8 +131,10 @@ public class ArticleController {
 
         int likesCount = likeRepository.countByArticle(article);
 
+        boolean isLiked = likeRepository.existsByUserAndArticle(user, article);
+
         return new ArticleResponse(
-                article.getId(), article.getHeading(), article.getContent(),categories,userSummary, likesCount
+                article.getId(), article.getHeading(), article.getContent(),categories,userSummary, likesCount, isLiked
         );
 
     }
