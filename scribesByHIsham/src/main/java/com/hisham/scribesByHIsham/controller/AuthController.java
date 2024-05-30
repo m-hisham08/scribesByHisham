@@ -30,6 +30,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.Collections;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -64,8 +65,6 @@ public class AuthController {
                 )
         );
 
-        logger.info("Authentication successful!!!!!!!!!");
-
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         String jwt = tokenProvider.generateJWTToken(authentication);
@@ -89,9 +88,14 @@ public class AuthController {
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
-        Role userRole = roleRepository.findByName(RoleName.ROLE_USER)
-                .orElseThrow(() -> new AppException("User Role not set."));
-
+        Role userRole = null;
+        if(userRepository.findAll().isEmpty()){
+            userRole = roleRepository.findByName(RoleName.ROLE_ADMIN)
+                    .orElseThrow(() -> new AppException("User Role not set."));
+        }else{
+            userRole = roleRepository.findByName(RoleName.ROLE_USER)
+                    .orElseThrow(() -> new AppException("User Role not set."));
+        }
         user.setRoles(Collections.singleton(userRole));
 
         User result = userRepository.save(user);

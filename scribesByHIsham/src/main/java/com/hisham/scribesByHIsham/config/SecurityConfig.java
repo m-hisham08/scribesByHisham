@@ -39,9 +39,21 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .cors(cors -> cors.disable())
                 .authorizeHttpRequests(requests -> requests
-                        .requestMatchers(HttpMethod.GET,"/api/v1/article", "/api/v1/article/**").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/v1/article").hasRole("USER")
-                        .anyRequest().permitAll()
+                        .requestMatchers(HttpMethod.GET,"/api/articles", "/api/articles/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/user/**", "/api/users/**").permitAll()
+
+                        .requestMatchers(HttpMethod.POST, "/api/auth/**").permitAll()
+
+                        .requestMatchers(HttpMethod.POST, "/api/articles").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/articles").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/articles").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PATCH, "/api/articles").hasRole("ADMIN")
+
+                        .requestMatchers(HttpMethod.POST, "/api/upload").hasRole("ADMIN")
+
+                        .requestMatchers(HttpMethod.POST,"/api/like/**").hasRole("USER")
+                        .requestMatchers(HttpMethod.GET, "/api/articles/*/comments/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/articles/*/comments").hasRole("USER")
                 )
                 .httpBasic(Customizer.withDefaults())
                 .formLogin(Customizer.withDefaults())
